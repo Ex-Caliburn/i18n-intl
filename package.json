@@ -1,0 +1,169 @@
+{
+  "name": "jaylee-i18n",
+  "displayName": "jaylee-i18n",
+  "description": "VSCode国际化插件，支持中文提取、自动翻译、Excel导入导出等功能",
+  "publisher": "jaylee",
+  "keywords": [
+    "fast i18n",
+    "i18n tool",
+    "i18n",
+    "developer-tool"
+  ],
+  "version": "9.0.0",
+  "engines": {
+    "vscode": "^1.87.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "contributes": {},
+    "commands": [
+      {
+        "command": "i18n.extraction",
+        "title": "提取当前"
+      },
+      {
+        "command": "i18n.extractFolder",
+        "title": "提取当前目录"
+      },
+      {
+        "command": "i18n.extractProject",
+        "title": "提取项目"
+      },
+      {
+        "command": "i18n.translateToEnglish",
+        "title": "火山翻译"
+      },
+      {
+        "command": "i18n.initConfig",
+        "title": "项目设置"
+      },
+      {
+        "command": "i18n.export",
+        "title": "导出 execl"
+      },
+      {
+        "command": "i18n.import",
+        "title": "导入 execl"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "sparkup.submenu",
+        "label": " i18n"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "sparkup.submenu",
+          "group": "sparkup"
+        }
+      ],
+      "explorer/context": [
+        {
+          "submenu": "sparkup.submenu",
+          "group": "sparkup"
+        }
+      ],
+      "sparkup.submenu": [
+        {
+          "command": "i18n.extraction",
+          "group": "sparkup",
+          "when": "resourceExtname =~ /\\.(js|jsx|ts|tsx|vue)$/i"
+        },
+        {
+          "command": "i18n.extractFolder",
+          "group": "sparkup",
+          "when": "resourceScheme == file && !resourceExtname"
+        },
+        {
+          "command": "i18n.extractProject",
+          "group": "sparkup"
+        },
+        {
+          "command": "i18n.translateToEnglish",
+          "group": "sparkup"
+        },
+        {
+          "command": "i18n.initConfig",
+          "group": "sparkup"
+        },
+        {
+          "command": "i18n.export"
+        },
+        {
+          "command": "i18n.import"
+        }
+      ]
+    }
+  },
+  "icon": "logo.png",
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test",
+    "test-simple": "node test-simple.js",
+    "test-advanced": "node test-advanced.js",
+    "check": "node check-env.js",
+    "package": "vsce package",
+    "publish": "vsce publish",
+    "publish:patch": "vsce publish patch",
+    "publish:minor": "vsce publish minor",
+    "publish:major": "vsce publish major",
+    "release": "bash scripts/publish.sh"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.24.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/ejs": "^3.1.5",
+    "@types/fs-extra": "^11.0.4",
+    "@types/jscodeshift": "^0.11.11",
+    "@types/lodash": "^4.17.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/serialize-javascript": "^5.0.4",
+    "@types/vscode": "^1.87.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "@vscode/test-cli": "^0.0.6",
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ex-Caliburn/i18n-vscode.git"
+  },
+  "dependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/traverse": "^7.24.1",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__traverse": "^7.20.5",
+    "@volcengine/openapi": "^1.30.2",
+    "@vue/compiler-sfc": "^3.4.21",
+    "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
+    "ejs": "^3.1.9",
+    "exceljs": "^4.4.0",
+    "fs-extra": "^11.2.0",
+    "htmlparser2": "^9.1.0",
+    "jscodeshift": "^0.15.2",
+    "lodash": "^4.17.21",
+    "prettier": "^3.2.5",
+    "serialize-javascript": "^6.0.2",
+    "node-fetch": "^2.6.7"
+  }
+}
