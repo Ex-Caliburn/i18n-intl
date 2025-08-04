@@ -5,7 +5,7 @@ import path from "path";
 import Excel from "exceljs";
 import readLanguageFile from "../utils/readLanguageFile";
 export default (context: vscode.ExtensionContext) => {
-  vscode.commands.registerCommand("i18n.export", (data) => {
+  vscode.commands.registerCommand("jaylee-i18n.export", (data) => {
     console.log("data.url", data.path);
     const rootPath = getRootPath();
     const { outDir, defaultLanguage, language = [], extname } = getI18nConfig();

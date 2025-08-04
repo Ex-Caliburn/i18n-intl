@@ -271,7 +271,7 @@ async function translateText(text: string, accessKey: string, secretKey: string)
 }
 
 export default (context: vscode.ExtensionContext) => {
-  vscode.commands.registerCommand("i18n.translateToEnglish", async () => {
+  vscode.commands.registerCommand("jaylee-i18n.translateToEnglish", async () => {
     try {
       // 读取配置文件
       const config = getI18nConfig();

@@ -23,31 +23,31 @@
   "contributes": {
     "commands": [
       {
-        "command": "i18n.extraction",
+        "command": "jaylee-i18n.extraction",
         "title": "提取当前"
       },
       {
-        "command": "i18n.extractFolder",
+        "command": "jaylee-i18n.extractFolder",
         "title": "提取当前目录"
       },
       {
-        "command": "i18n.extractProject",
+        "command": "jaylee-i18n.extractProject",
         "title": "提取项目"
       },
       {
-        "command": "i18n.translateToEnglish",
+        "command": "jaylee-i18n.translateToEnglish",
         "title": "在线翻译"
       },
       {
-        "command": "i18n.initConfig",
+        "command": "jaylee-i18n.initConfig",
         "title": "项目设置"
       },
       {
-        "command": "i18n.export",
+        "command": "jaylee-i18n.export",
         "title": "导出 execl"
       },
       {
-        "command": "i18n.import",
+        "command": "jaylee-i18n.import",
         "title": "导入 execl"
       }
     ],
@@ -72,32 +72,32 @@
       ],
       "sparkup.submenu": [
         {
-          "command": "i18n.extraction",
+          "command": "jaylee-i18n.extraction",
           "group": "sparkup",
           "when": "resourceExtname =~ /\\.(js|jsx|ts|tsx|vue)$/i"
         },
         {
-          "command": "i18n.extractFolder",
+          "command": "jaylee-i18n.extractFolder",
           "group": "sparkup",
           "when": "resourceScheme == file && !resourceExtname"
         },
         {
-          "command": "i18n.extractProject",
+          "command": "jaylee-i18n.extractProject",
           "group": "sparkup"
         },
         {
-          "command": "i18n.translateToEnglish",
+          "command": "jaylee-i18n.translateToEnglish",
           "group": "sparkup"
         },
         {
-          "command": "i18n.initConfig",
+          "command": "jaylee-i18n.initConfig",
           "group": "sparkup"
         },
         {
-          "command": "i18n.export"
+          "command": "jaylee-i18n.export"
         },
         {
-          "command": "i18n.import"
+          "command": "jaylee-i18n.import"
         }
       ]
     }

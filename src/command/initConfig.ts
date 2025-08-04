@@ -4,7 +4,7 @@ import * as path from "path";
 import { serializeCode } from "../utils/serializeCode";
 import { CONFIG_FILE_NAME, configTemplate} from "../constants";
 export default async (context: vscode.ExtensionContext) => {
-  vscode.commands.registerCommand("i18n.initConfig", async (data) => {
+  vscode.commands.registerCommand("jaylee-i18n.initConfig", async (data) => {
     let rootPath = "";
     
     // 尝试从命令参数获取根路径

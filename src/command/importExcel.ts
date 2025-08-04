@@ -5,7 +5,7 @@ import Excel from "exceljs";
 import { getI18nConfig, getRootPath } from "../utils";
 
 export default (context: vscode.ExtensionContext) => {
-  vscode.commands.registerCommand("i18n.import", async () => {
+  vscode.commands.registerCommand("jaylee-i18n.import", async () => {
     const excelFilePath = await vscode.window.showOpenDialog({
       canSelectMany: false,
       filters: {

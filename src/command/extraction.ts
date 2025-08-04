@@ -42,7 +42,7 @@ async function getFiles(dir: string, extensions: string[]): Promise<string[]> {
 
 export default (context: vscode.ExtensionContext) => {
   // 单个文件提取
-  vscode.commands.registerCommand("i18n.extraction", async (data) => {
+  vscode.commands.registerCommand("jaylee-i18n.extraction", async (data) => {
     console.log('data', data);
     
     // 处理从资源管理器右键菜单触发的情况
@@ -101,7 +101,7 @@ export default (context: vscode.ExtensionContext) => {
   });
 
   // 提取当前目录
-  vscode.commands.registerCommand("i18n.extractFolder", async (data) => {
+  vscode.commands.registerCommand("jaylee-i18n.extractFolder", async (data) => {
     try {
       console.log('extractFolder data:', data);
       console.log('data type:', typeof data);
@@ -190,7 +190,7 @@ export default (context: vscode.ExtensionContext) => {
   });
 
   // 提取项目
-  vscode.commands.registerCommand("i18n.extractProject", async () => {
+  vscode.commands.registerCommand("jaylee-i18n.extractProject", async () => {
     try {
       const workspaceFolders = vscode.workspace.workspaceFolders;
       if (!workspaceFolders || workspaceFolders.length === 0) {
