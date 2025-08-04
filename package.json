@@ -17,7 +17,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onCommand:jaylee-i18n.extraction",
+    "onCommand:jaylee-i18n.extractFolder",
+    "onCommand:jaylee-i18n.extractProject",
+    "onCommand:jaylee-i18n.translateToEnglish",
+    "onCommand:jaylee-i18n.initConfig",
+    "onCommand:jaylee-i18n.export",
+    "onCommand:jaylee-i18n.import"
   ],
   "main": "./out/extension.js",
   "contributes": {
