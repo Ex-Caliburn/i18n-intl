@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
   exportExcel(context);
   // 导入功能
   importExcel(context);
-  // 火山翻译功能
+  // 在线翻译功能
   translateToEnglish(context);
   // i18n key 装饰器 提示功能
   const annotator = new Annotator(context);

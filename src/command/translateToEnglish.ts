@@ -7,7 +7,7 @@ import { getI18nConfig, getRootPath, unFlattenJson } from "../utils";
 
 const debuglog = util.debuglog('signer');
 
-// 火山翻译API接口
+// 在线翻译API接口
 interface HuoshanTranslateResponse {
   ResponseMetadata: {
     RequestId: string;
@@ -193,7 +193,7 @@ function getSignHeaders(originHeaders: any, needSignHeaders?: string[]) {
   return [signedHeaderKeys, canonicalHeaders];
 }
 
-// 调用火山翻译API
+    // 调用在线翻译API
 async function translateText(text: string, accessKey: string, secretKey: string): Promise<string> {
   const requestBody = {
     TextList: [text],
@@ -238,9 +238,9 @@ async function translateText(text: string, accessKey: string, secretKey: string)
   const url = `https://translate.volcengineapi.com/?${qs.stringify(signParams.query)}`;
 
   try {
-    console.log('火山翻译API请求URL:', url);
-    console.log('火山翻译API请求头:', headers);
-    console.log('火山翻译API请求体:', requestBody);
+    console.log('在线翻译API请求URL:', url);
+    console.log('在线翻译API请求头:', headers);
+    console.log('在线翻译API请求体:', requestBody);
     
     const response = await fetch(url, {
       method: 'POST',
@@ -248,11 +248,11 @@ async function translateText(text: string, accessKey: string, secretKey: string)
       body: bodyString
     });
 
-    console.log('火山翻译API响应状态:', response.status);
-    console.log('火山翻译API响应头:', response.headers);
+    console.log('在线翻译API响应状态:', response.status);
+    console.log('在线翻译API响应头:', response.headers);
     
     const data = await response.json() as HuoshanTranslateResponse;
-    console.log('火山翻译API响应:', data);
+    console.log('在线翻译API响应:', data);
     
     if (data.ResponseMetadata?.Error) {
       throw new Error(`翻译API错误: ${data.ResponseMetadata.Error.Message}`);

@@ -17,14 +17,10 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:javascript",
-    "onLanguage:typescript",
-    "onLanguage:javascriptreact",
-    "onLanguage:typescriptreact"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "contributes": {},
     "commands": [
       {
         "command": "i18n.extraction",
@@ -40,7 +36,7 @@
       },
       {
         "command": "i18n.translateToEnglish",
-        "title": "火山翻译"
+        "title": "在线翻译"
       },
       {
         "command": "i18n.initConfig",
