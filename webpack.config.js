@@ -12,6 +12,9 @@ module.exports = {
   externals: {
     vscode: 'commonjs vscode'
   },
+  optimization: {
+    minimize: true,
+  },
   resolve: {
     extensions: ['.ts', '.js']
   },
