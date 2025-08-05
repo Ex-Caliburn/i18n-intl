@@ -124,7 +124,7 @@
     "test-simple": "node test-simple.js",
     "test-advanced": "node test-advanced.js",
     "check": "node check-env.js",
-    "package": "vsce package --no-dependencies",
+    "package": "vsce package",
     "publish": "vsce publish",
     "publish:patch": "vsce publish patch",
     "publish:minor": "vsce publish minor",
