@@ -1,14 +1,33 @@
 import * as vscode from "vscode";
 import fs from "fs-extra";
 import path from "path";
+import vm from "vm";
 import { CONFIG_FILE_NAME } from "../constants";
 import { merge } from "lodash";
 import readLanguageFile from "./readLanguageFile";
 export const editor = vscode.window.activeTextEditor;
 const defaultConfig = require("../default.config");
+
+function loadConfig(configPath: string): any {
+  if (!fs.existsSync(configPath)) {return {};}
+  if (configPath.endsWith('.json')) {
+    return fs.readJSONSync(configPath);
+  }
+  // 兼容 .js 配置
+  const code = fs.readFileSync(configPath, 'utf-8');
+  const sandbox = { module: { exports: {} }, exports: {} };
+  try {
+    vm.createContext(sandbox);
+    vm.runInContext(code, sandbox, { filename: configPath });
+    return sandbox.module.exports;
+  } catch (e) {
+    console.error('解析配置文件失败:', e);
+    return {};
+  }
+}
+
 export const getRootPath = (uri?: vscode.Uri) => {
   let rootPath = "";
-  
   // 如果提供了 URI，优先使用它
   if (uri) {
     const selectedWorkspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
@@ -17,7 +36,6 @@ export const getRootPath = (uri?: vscode.Uri) => {
       return rootPath;
     }
   }
-  
   // 否则使用活动的文本编辑器
   if (editor) {
     const currentDocumentUri = editor.document.uri;
@@ -27,26 +45,36 @@ export const getRootPath = (uri?: vscode.Uri) => {
       rootPath = selectedWorkspaceFolder.uri.fsPath;
     }
   }
-  
+  // 如果还是没有，尝试从工作区文件夹获取
+  if (!rootPath) {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (workspaceFolders && workspaceFolders.length > 0) {
+      rootPath = workspaceFolders[0].uri.fsPath;
+    }
+  }
   return rootPath;
 };
+
 const getUserConfig = () => {
   const rootPath = getRootPath();
   console.log("rootPath", rootPath);
-  
   if (!rootPath) {
     console.log("无法获取项目根路径");
     return {};
   }
-  
   const configPath = path.resolve(rootPath, CONFIG_FILE_NAME);
   console.log("configPath", configPath);
-  let config;
-  if (!fs.existsSync(configPath)) {
-    console.log("配置文件不存在");
-    config = {};
-  } else {
-    config = require(configPath);
+  let config = {};
+  try {
+    if (fs.existsSync(configPath)) {
+      config = loadConfig(configPath);
+      console.log("成功加载配置文件:", configPath);
+    } else {
+      console.log("配置文件不存在，使用默认配置:", configPath);
+    }
+  } catch (error) {
+    console.error("加载配置文件时出错:", error);
+    console.log("使用默认配置");
   }
   return config;
 };
@@ -69,6 +97,7 @@ export const getSourceValue = (key: string): string | undefined => {
   console.log("value", value);
   return typeof value === 'string' ? value : undefined;
 };
+
 export const getKeySourceMap = (): Record<string, string> => {
   const { outDir, defaultLanguage, extname } = getI18nConfig();
   const rootPath = getRootPath();

@@ -9,7 +9,7 @@
     "i18n",
     "developer-tool"
   ],
-  "version": "11.0.4",
+  "version": "11.0.5",
   "engines": {
     "vscode": "^1.87.0"
   },
@@ -24,7 +24,11 @@
     "onCommand:jaylee-i18n.translateToEnglish",
     "onCommand:jaylee-i18n.initConfig",
     "onCommand:jaylee-i18n.export",
-    "onCommand:jaylee-i18n.import"
+    "onCommand:jaylee-i18n.import",
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:javascriptreact",
+    "onLanguage:vue"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -112,7 +116,7 @@
   "icon": "logo.png",
   "scripts": {
     "vscode:prepublish": "yarn run compile",
-    "compile": "tsc -p ./",
+    "compile": "webpack --mode production",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
@@ -120,7 +124,7 @@
     "test-simple": "node test-simple.js",
     "test-advanced": "node test-advanced.js",
     "check": "node check-env.js",
-    "package": "vsce package",
+    "package": "vsce package --no-dependencies",
     "publish": "vsce publish",
     "publish:patch": "vsce publish patch",
     "publish:minor": "vsce publish minor",
@@ -143,7 +147,10 @@
     "@vscode/test-cli": "^0.0.6",
     "@vscode/test-electron": "^2.3.9",
     "eslint": "^8.56.0",
-    "typescript": "^5.3.3"
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.3.3",
+    "webpack": "^5.101.0",
+    "webpack-cli": "^6.0.1"
   },
   "license": "MIT",
   "repository": {
@@ -165,8 +172,24 @@
     "htmlparser2": "^9.1.0",
     "jscodeshift": "^0.15.2",
     "lodash": "^4.17.21",
+    "node-fetch": "^2.6.7",
     "prettier": "^3.2.5",
-    "serialize-javascript": "^6.0.2",
-    "node-fetch": "^2.6.7"
-  }
+    "serialize-javascript": "^6.0.2"
+  },
+  "bundledDependencies": [
+    "fs-extra",
+    "exceljs",
+    "lodash",
+    "node-fetch",
+    "bcryptjs",
+    "ejs",
+    "htmlparser2",
+    "jscodeshift",
+    "prettier",
+    "serialize-javascript",
+    "@babel/core",
+    "@babel/traverse",
+    "@volcengine/openapi",
+    "@vue/compiler-sfc"
+  ]
 }
