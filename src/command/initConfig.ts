@@ -4,6 +4,94 @@ import * as path from "path";
 import { serializeCode } from "../utils/serializeCode";
 import { CONFIG_FILE_NAME, configTemplate} from "../constants";
 
+// Vue项目检测函数
+function isVueProject(rootPath: string): boolean {
+  try {
+    const packageJsonPath = path.join(rootPath, 'package.json');
+    if (!fs.existsSync(packageJsonPath)) {
+      return false;
+    }
+    
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    const dependencies = packageJson.dependencies || {};
+    const devDependencies = packageJson.devDependencies || {};
+    
+    // 只检查是否有vue依赖
+    return !!(dependencies.vue || devDependencies.vue);
+  } catch (error) {
+    console.log('检测Vue项目时出错:', error);
+    return false;
+  }
+}
+
+// 创建Vue i18n配置文件
+async function createVueI18nConfig(rootPath: string): Promise<void> {
+  const localesDir = path.join(rootPath, 'src', 'locales');
+  const indexJsPath = path.join(localesDir, 'index.js');
+  
+  // 创建locales目录
+  if (!fs.existsSync(localesDir)) {
+    await fs.mkdirp(localesDir);
+    console.log('创建目录:', localesDir);
+  }
+  
+  // Vue i18n配置文件内容
+  const vueI18nConfig = `import VueI18n from 'vue-i18n'
+import Vue from 'vue'
+let zh = require('./zh_cn.json')
+
+Vue.use(VueI18n)
+
+export default new VueI18n({
+	locale: 'zh',
+	messages: {
+		zh 
+	}
+})
+`;
+  
+  // 检查文件是否存在且不为空
+  let shouldCreate = true;
+  if (fs.existsSync(indexJsPath)) {
+    const fileContent = fs.readFileSync(indexJsPath, 'utf8').trim();
+    if (fileContent === '') {
+      console.log('src/locales/index.js 文件存在但为空，将创建内容');
+    } else {
+      console.log('src/locales/index.js 文件存在且不为空');
+      const overwrite = await vscode.window.showWarningMessage(
+        `src/locales/index.js 文件已存在且不为空\n\n是否要覆盖现有文件？`,
+        '是', '否'
+      );
+      
+      if (overwrite !== '是') {
+        console.log('用户取消覆盖 src/locales/index.js 文件');
+        shouldCreate = false;
+      }
+    }
+  }
+  
+  if (shouldCreate) {
+    try {
+      // 写入index.js文件
+      await fs.writeFile(indexJsPath, vueI18nConfig);
+      console.log('创建Vue i18n配置文件:', indexJsPath);
+      
+      // 创建空的zh_cn.json文件
+      const zhCnPath = path.join(localesDir, 'zh_cn.json');
+      if (!fs.existsSync(zhCnPath)) {
+        await fs.writeFile(zhCnPath, '{}');
+        console.log('创建空的zh_cn.json文件:', zhCnPath);
+      }
+      
+      vscode.window.showInformationMessage(`✅ Vue项目检测成功！\n\n已创建以下文件:\n1. src/locales/index.js - Vue i18n配置文件\n2. src/locales/zh_cn.json - 中文翻译文件\n\n请根据项目需求修改配置`);
+    } catch (error) {
+      console.error('创建Vue i18n配置文件失败:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      vscode.window.showErrorMessage(`❌ 创建Vue i18n配置文件失败: ${errorMessage}`);
+    }
+  }
+}
+
 export default async (context: vscode.ExtensionContext) => {
   vscode.commands.registerCommand("jaylee-i18n.initConfig", async (data) => {
     console.log('=== 开始初始化项目配置 ===');
@@ -76,6 +164,17 @@ export default async (context: vscode.ExtensionContext) => {
       return;
     }
     
+    // 检测是否为Vue项目
+    console.log('检测项目类型...');
+    const isVue = isVueProject(rootPath);
+    console.log('是否为Vue项目:', isVue);
+    
+    // 如果是Vue项目，创建Vue i18n配置文件
+    if (isVue) {
+      console.log('检测到Vue项目，开始创建Vue i18n配置文件...');
+      await createVueI18nConfig(rootPath);
+    }
+    
     const configPath = path.join(rootPath, CONFIG_FILE_NAME);
     console.log('配置文件路径:', configPath);
     
@@ -97,7 +196,11 @@ export default async (context: vscode.ExtensionContext) => {
       fs.writeFileSync(configPath, configTemplate);
       console.log('配置文件写入成功');
       
-      vscode.window.showInformationMessage(`✅ 配置文件已创建: ${configPath}\n\n配置文件包含以下设置:\n1. 入口目录配置\n2. 输出目录配置\n3. 语言配置\n4. 翻译API配置\n\n请根据项目需求修改配置`);
+      const successMessage = isVue 
+        ? `✅ 项目配置完成！\n\n已创建以下文件:\n1. ${configPath} - 项目配置文件\n2. src/locales/index.js - Vue i18n配置文件\n3. src/locales/zh_cn.json - 中文翻译文件\n\n请根据项目需求修改配置`
+        : `✅ 配置文件已创建: ${configPath}\n\n配置文件包含以下设置:\n1. 入口目录配置\n2. 输出目录配置\n3. 语言配置\n4. 翻译API配置\n\n请根据项目需求修改配置`;
+      
+      vscode.window.showInformationMessage(successMessage);
       
       // 打开配置文件
       const configUri = vscode.Uri.file(configPath);
